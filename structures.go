@@ -36,7 +36,7 @@ type Filter struct {
 	Genre   []FieldValue `json:"genre,omitempty"`
 	Year    []FieldValue `json:"year,omitempty"`
 	Country []FieldValue `json:"country,omitempty"`
-	Type    string       `json:"type,omitempty"`
+	Types   []string     `json:"types,omitempty"`
 	Library string       `json:"library,omitempty"`
 }
 
