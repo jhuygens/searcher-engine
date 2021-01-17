@@ -72,7 +72,7 @@ func Search(filter Filter) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	err = cache.SetExpire(searchKey, config.GetInt("cache.expire_time"))
+	err = cache.Expire(searchKey, config.GetInt("cache.expire_time"))
 	if err != nil {
 		return "", err
 	}
