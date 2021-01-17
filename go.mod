@@ -4,5 +4,5 @@ go 1.15
 
 require (
 	github.com/jgolang/config v1.0.0
-	github.com/jhuygens/cache v0.0.0-20210117021221-222506bf16a2
+	github.com/jhuygens/cache v0.0.0-20210117044501-266f2bad1f25
 )

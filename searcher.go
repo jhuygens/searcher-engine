@@ -64,19 +64,19 @@ func Search(filter Filter) (string, error) {
 		)
 	}
 	sort.Sort(ByName(items))
-	keySearch, err := GenerateKeySearch(filter)
+	searchKey, err := GenerateSearchKey(filter)
 	if err != nil {
 		return "", err
 	}
-	err = cache.Set(keySearch, items)
+	err = setCacheItems(searchKey, items)
 	if err != nil {
 		return "", err
 	}
-	err = cache.SetExpire(keySearch, config.GetInt("cache.expire_time"))
+	err = cache.SetExpire(searchKey, config.GetInt("cache.expire_time"))
 	if err != nil {
 		return "", err
 	}
-	return keySearch, nil
+	return searchKey, nil
 }
 
 // ByName items order
@@ -86,8 +86,8 @@ func (a ByName) Len() int           { return len(a) }
 func (a ByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByName) Less(i, j int) bool { return strings.ToLower(a[i].Name) < strings.ToLower(a[j].Name) }
 
-// GenerateKeySearch ...
-func GenerateKeySearch(filter Filter) (string, error) {
+// GenerateSearchKey ...
+func GenerateSearchKey(filter Filter) (string, error) {
 	buf, err := json.Marshal(filter)
 	if err != nil {
 		return "", err
@@ -95,4 +95,12 @@ func GenerateKeySearch(filter Filter) (string, error) {
 	h := sha256.New()
 	h.Write(buf)
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
+}
+
+func setCacheItems(searchKey string, items []Item) error {
+	buff, err := json.Marshal(items)
+	if err != nil {
+		return err
+	}
+	return cache.Set(searchKey, string(buff))
 }
