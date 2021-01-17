@@ -1,7 +1,5 @@
 package searcher
 
-import "strings"
-
 // Item doc ...
 type Item struct {
 	Type    string `json:"type"`
@@ -47,10 +45,3 @@ type FieldValue struct {
 	Value   string `json:"value,omitempty"`
 	Exclude bool   `json:"exclude,omitempty"`
 }
-
-// ByName items order
-type ByName []Item
-
-func (a ByName) Len() int           { return len(a) }
-func (a ByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByName) Less(i, j int) bool { return strings.ToLower(a[i].Name) < strings.ToLower(a[j].Name) }

@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strings"
 
+	"github.com/jgolang/config"
 	"github.com/jhuygens/cache"
 )
 
@@ -27,7 +29,7 @@ func RegisterSearcher(library string, searcher Searcher) {
 
 // ValidateRegisterImplement doc ...
 func ValidateRegisterImplement() error {
-	if engine.searchers != nil {
+	if len(engine.searchers) == 0 {
 		return nil
 	}
 	return fmt.Errorf("The implementation of the 'Searcher' interface has not been registered")
@@ -35,6 +37,10 @@ func ValidateRegisterImplement() error {
 
 // Search returns a key cache search
 func Search(filter Filter) (string, error) {
+	err := ValidateRegisterImplement()
+	if err != nil {
+		return "", err
+	}
 	var items []Item
 	if filter.Library == "" {
 		for _, searcher := range engine.searchers {
@@ -66,8 +72,19 @@ func Search(filter Filter) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	err = cache.SetExpire(keySearch, config.GetInt("cache.expire_time"))
+	if err != nil {
+		return "", err
+	}
 	return keySearch, nil
 }
+
+// ByName items order
+type ByName []Item
+
+func (a ByName) Len() int           { return len(a) }
+func (a ByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByName) Less(i, j int) bool { return strings.ToLower(a[i].Name) < strings.ToLower(a[j].Name) }
 
 // GenerateKeySearch ...
 func GenerateKeySearch(filter Filter) (string, error) {
