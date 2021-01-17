@@ -42,7 +42,7 @@ func Search(filter Filter) (string, error) {
 		return "", err
 	}
 	var items []Item
-	if filter.Library == "" {
+	if filter.Library == "all" {
 		for _, searcher := range engine.searchers {
 			result, err := searcher.Search(filter)
 			if err != nil {
