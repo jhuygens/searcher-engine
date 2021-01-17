@@ -29,7 +29,7 @@ func RegisterSearcher(library string, searcher Searcher) {
 
 // ValidateRegisterImplement doc ...
 func ValidateRegisterImplement() error {
-	if len(engine.searchers) == 0 {
+	if len(engine.searchers) > 0 {
 		return nil
 	}
 	return fmt.Errorf("The implementation of the 'Searcher' interface has not been registered")
