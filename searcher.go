@@ -104,6 +104,15 @@ func GenerateSearchKey(filter Filter) (string, error) {
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }
 
+// GetSearchersRegistryNames ...
+func GetSearchersRegistryNames(filter Filter) []string {
+	var searchersNames []string
+	for searcherName := range engine.searchers {
+		searchersNames = append(searchersNames, searcherName)
+	}
+	return searchersNames
+}
+
 func setCacheItems(searchKey string, items []Item) error {
 	buff, err := json.Marshal(items)
 	if err != nil {
