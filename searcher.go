@@ -23,8 +23,12 @@ func New(searchers map[string]Searcher) *Engine {
 }
 
 // RegisterSearcher doc ...
-func RegisterSearcher(library string, searcher Searcher) {
+func RegisterSearcher(library string, searcher Searcher) error {
+	if library == "" {
+		return fmt.Errorf("No set a library name")
+	}
 	engine.searchers[library] = searcher
+	return nil
 }
 
 // ValidateRegisterImplement doc ...
@@ -54,6 +58,9 @@ func Search(filter Filter) (string, error) {
 			)
 		}
 	} else {
+		if engine.searchers[filter.Library] == nil {
+			return "", fmt.Errorf("Error: the searcher %v is not regiter", filter.Library)
+		}
 		result, err := engine.searchers[filter.Library].Search(filter)
 		if err != nil {
 			return "", err
