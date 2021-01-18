@@ -105,12 +105,8 @@ func GenerateSearchKey(filter Filter) (string, error) {
 }
 
 // GetSearchersRegistryNames ...
-func GetSearchersRegistryNames(filter Filter) []string {
-	var searchersNames []string
-	for searcherName := range engine.searchers {
-		searchersNames = append(searchersNames, searcherName)
-	}
-	return searchersNames
+func GetSearchersRegistryNames() []string {
+	return engine.GetSearchersRegistryNames()
 }
 
 func setCacheItems(searchKey string, items []Item) error {
